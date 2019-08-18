@@ -9,8 +9,9 @@ import {
   StatusBar
 } from 'react-native'
 import * as Font from 'expo-font'
+import { createStackNavigator, createAppContainer } from 'react-navigation'
 
-export default function App() {
+const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false)
   const loadfonts = async () => {
     await Font.loadAsync({
@@ -37,7 +38,10 @@ export default function App() {
         />
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.btnTxt} onPress={() => alert('Login Works')}>
+            <Text
+              style={styles.btnTxt}
+              onPress={() => navigation.navigate('Details')}
+            >
               Login
             </Text>
           </TouchableOpacity>
@@ -52,6 +56,44 @@ export default function App() {
   } else {
     return null
   }
+}
+
+HomeScreen.navigationOptions = { header: null }
+
+const DetailsScreen = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details Screen</Text>
+    </View>
+  )
+}
+
+DetailsScreen.navigationOptions = { title: 'My App', headerRight: <View /> }
+
+const RootStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Details: DetailsScreen
+  },
+  {
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#1e90ff'
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        textAlign: 'center',
+        flex: 1
+      }
+    }
+  }
+)
+
+const AppContainer = createAppContainer(RootStack)
+
+export default function App() {
+  return <AppContainer />
 }
 
 const styles = StyleSheet.create({
