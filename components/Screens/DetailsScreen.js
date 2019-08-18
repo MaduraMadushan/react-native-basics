@@ -1,11 +1,23 @@
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Button,
+  AsyncStorage
+} from 'react-native'
 import MapView from 'react-native-maps'
 
-const DetailsScreen = () => {
+const DetailsScreen = ({ navigation }) => {
+  const logout = async () => {
+    await AsyncStorage.clear()
+    navigation.navigate('Auth')
+  }
   return (
     <View style={styles.container}>
-      <MapView
+      <Button title='Logout' onPress={logout} />
+      {/* <MapView
         style={styles.map}
         initialRegion={{
           latitude: 37.78825,
@@ -19,7 +31,7 @@ const DetailsScreen = () => {
           title='My Location'
           description='Here I am.'
         />
-      </MapView>
+      </MapView> */}
     </View>
   )
 }

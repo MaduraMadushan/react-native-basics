@@ -6,33 +6,79 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   StatusBar,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native'
+import * as Font from 'expo-font'
 
 const HomeScreen = ({ navigation }) => {
-  return (
-    <KeyboardAvoidingView behavior='padding' style={styles.container}>
-      <StatusBar backgroundColor='#1e90ff' barStyle='light-content' />
-      <Text style={styles.welcome}>Login To My App</Text>
-      <TextInput style={styles.input} placeholder='Username' />
-      <TextInput style={styles.input} placeholder='password' secureTextEntry />
-      <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.userBtn}>
-          <Text
-            style={styles.btnTxt}
-            onPress={() => navigation.navigate('Details')}
-          >
-            Login
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.userBtn}>
-          <Text style={styles.btnTxt} onPress={() => alert('Signup Works')}>
-            Signup
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
-  )
+  const [loading, setLoading] = React.useState(false)
+  const loadfonts = async () => {
+    await Font.loadAsync({
+      DancingScriptBold: require('./../../assets/fonts/DancingScript-Bold.ttf'),
+      NotoSerifTCBold: require('./../../assets/fonts/NotoSerifTC-Bold.otf')
+    })
+    setLoading(true)
+  }
+
+  React.useEffect(() => {
+    loadfonts()
+  }, [])
+
+  const [username, setUsername] = React.useState('')
+  const [password, setPassword] = React.useState('')
+
+  const userInfo = { username: 'admin', password: 'password' }
+  const _login = async () => {
+    if (userInfo.username === username && userInfo.password === password) {
+      //alert('logged In')
+      await AsyncStorage.setItem('isLoggedIn', '1')
+      navigation.navigate('Details')
+    } else {
+      alert('Username or Password is incorrect')
+    }
+  }
+
+  if (loading) {
+    return (
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+        <StatusBar backgroundColor='#1e90ff' barStyle='light-content' />
+        <Text style={styles.welcome}>Login To My App</Text>
+        <TextInput
+          style={styles.input}
+          placeholder='Username'
+          onChangeText={username => setUsername(username)}
+          value={username}
+          autoCapitalize='none'
+        />
+        <TextInput
+          style={styles.input}
+          placeholder='password'
+          secureTextEntry
+          onChangeText={password => setPassword(password)}
+          value={password}
+        />
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text
+              style={styles.btnTxt}
+              onPress={_login}
+              //onPress={() => navigation.navigate('Details')}
+            >
+              Login
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.btnTxt} onPress={() => alert('Signup Works')}>
+              Signup
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    )
+  } else {
+    return null
+  }
 }
 
 HomeScreen.navigationOptions = { header: null }
