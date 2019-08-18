@@ -1,5 +1,13 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  StatusBar
+} from 'react-native'
 import * as Font from 'expo-font'
 
 export default function App() {
@@ -18,11 +26,28 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native</Text>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text style={styles.instructions}>Madura Madushan</Text>
-      </View>
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+        <StatusBar backgroundColor='#1e90ff' barStyle='light-content' />
+        <Text style={styles.welcome}>Login To My App</Text>
+        <TextInput style={styles.input} placeholder='Username' />
+        <TextInput
+          style={styles.input}
+          placeholder='password'
+          secureTextEntry
+        />
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.btnTxt} onPress={() => alert('Login Works')}>
+              Login
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.btnTxt} onPress={() => alert('Signup Works')}>
+              Signup
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     )
   } else {
     return null
@@ -32,7 +57,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#1e90ff',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -40,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     margin: 10,
+    color: '#fff',
     fontFamily: 'DancingScriptBold'
   },
   instructions: {
@@ -48,5 +74,25 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 20,
     fontFamily: 'NotoSerifTCBold'
+  },
+  input: {
+    width: '90%',
+    backgroundColor: '#fff',
+    padding: 15,
+    marginBottom: 10
+  },
+  userBtn: {
+    backgroundColor: '#ffd700',
+    padding: 15,
+    width: '45%'
+  },
+  btnTxt: {
+    fontSize: 18,
+    textAlign: 'center'
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%'
   }
 })
